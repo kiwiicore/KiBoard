@@ -81,10 +81,12 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor3.Blue = ((byte)(0));
             serializableColor3.Green = ((byte)(0));
             serializableColor3.Red = ((byte)(0));
+            serializableColor3.Alpha = ((byte)(0));
             mouseSpeedIndicatorStyle2.InnerColor = serializableColor3;
             serializableColor4.Blue = ((byte)(0));
             serializableColor4.Green = ((byte)(0));
             serializableColor4.Red = ((byte)(0));
+            serializableColor4.Alpha = ((byte)(0));
             mouseSpeedIndicatorStyle2.OuterColor = serializableColor4;
             mouseSpeedIndicatorStyle2.OutlineWidth = 1;
             this.defaultMouseSpeed.IndicatorStyle = mouseSpeedIndicatorStyle2;

@@ -59,7 +59,7 @@ namespace ThoNohT.NohBoard.Keyboard
         /// The background color of the keyboard.
         /// </summary>
         [DataMember]
-        public SerializableColor BackgroundColor { get; set; } = Color.FromArgb(0, 0, 100);
+        public SerializableColor BackgroundColor { get; set; } = Color.FromArgb(255, 0, 0, 100);
 
         /// <summary>
         /// The filename of the background image, relative to the style's images folder.

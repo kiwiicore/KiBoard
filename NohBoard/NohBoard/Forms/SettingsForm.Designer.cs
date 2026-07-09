@@ -1,6 +1,9 @@
 ﻿/*
 Copyright (C) 2016 by Eric Bataille <e.c.p.bataille@gmail.com>
 
+Modified for KiBoard
+Copyright (C) 2026 kiwicore
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -74,6 +77,7 @@ namespace ThoNohT.NohBoard.Forms
             this.GeneralGroup = new System.Windows.Forms.GroupBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.txtTitle = new System.Windows.Forms.TextBox();
+            this.chkAllowTransparency = new System.Windows.Forms.CheckBox();
             this.TrapGroup.SuspendLayout();
             this.InputGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udPressHold)).BeginInit();
@@ -90,7 +94,7 @@ namespace ThoNohT.NohBoard.Forms
             this.TrapGroup.Controls.Add(this.chkTrapKeyboard);
             this.TrapGroup.Controls.Add(this.chkTrapMouse);
             this.TrapGroup.Controls.Add(this.lblTrapping);
-            this.TrapGroup.Location = new System.Drawing.Point(206, 68);
+            this.TrapGroup.Location = new System.Drawing.Point(206, 95);
             this.TrapGroup.Name = "TrapGroup";
             this.TrapGroup.Size = new System.Drawing.Size(203, 136);
             this.TrapGroup.TabIndex = 1;
@@ -160,9 +164,9 @@ namespace ThoNohT.NohBoard.Forms
             this.InputGroup.Controls.Add(this.udMouseSensitivity);
             this.InputGroup.Controls.Add(this.lblScrollHold);
             this.InputGroup.Controls.Add(this.lblMouseSensititivy);
-            this.InputGroup.Location = new System.Drawing.Point(13, 13);
+            this.InputGroup.Location = new System.Drawing.Point(13, 12);
             this.InputGroup.Name = "InputGroup";
-            this.InputGroup.Size = new System.Drawing.Size(187, 191);
+            this.InputGroup.Size = new System.Drawing.Size(187, 219);
             this.InputGroup.TabIndex = 2;
             this.InputGroup.TabStop = false;
             this.InputGroup.Text = "Input";
@@ -270,7 +274,7 @@ namespace ThoNohT.NohBoard.Forms
             // 
             // OkButton
             // 
-            this.OkButton.Location = new System.Drawing.Point(334, 306);
+            this.OkButton.Location = new System.Drawing.Point(334, 336);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(75, 23);
             this.OkButton.TabIndex = 7;
@@ -296,7 +300,7 @@ namespace ThoNohT.NohBoard.Forms
             this.CapitalizationGroup.Controls.Add(this.rdbAlwaysLower);
             this.CapitalizationGroup.Controls.Add(this.rdbAlwaysCaps);
             this.CapitalizationGroup.Controls.Add(this.rdbFollowKeystate);
-            this.CapitalizationGroup.Location = new System.Drawing.Point(10, 210);
+            this.CapitalizationGroup.Location = new System.Drawing.Point(10, 240);
             this.CapitalizationGroup.Name = "CapitalizationGroup";
             this.CapitalizationGroup.Size = new System.Drawing.Size(396, 91);
             this.CapitalizationGroup.TabIndex = 8;
@@ -370,9 +374,10 @@ namespace ThoNohT.NohBoard.Forms
             // 
             this.GeneralGroup.Controls.Add(this.lblTitle);
             this.GeneralGroup.Controls.Add(this.txtTitle);
+            this.GeneralGroup.Controls.Add(this.chkAllowTransparency);
             this.GeneralGroup.Location = new System.Drawing.Point(206, 12);
             this.GeneralGroup.Name = "GeneralGroup";
-            this.GeneralGroup.Size = new System.Drawing.Size(203, 50);
+            this.GeneralGroup.Size = new System.Drawing.Size(203, 77);
             this.GeneralGroup.TabIndex = 9;
             this.GeneralGroup.TabStop = false;
             this.GeneralGroup.Text = "General";
@@ -392,14 +397,24 @@ namespace ThoNohT.NohBoard.Forms
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.Size = new System.Drawing.Size(92, 20);
             this.txtTitle.TabIndex = 0;
-            // 
+            //
+            // chkAllowTransparency
+            //
+            this.chkAllowTransparency.AutoSize = true;
+            this.chkAllowTransparency.Location = new System.Drawing.Point(7, 44);
+            this.chkAllowTransparency.Name = "chkAllowTransparency";
+            this.chkAllowTransparency.Size = new System.Drawing.Size(83, 17);
+            this.chkAllowTransparency.TabIndex = 2;
+            this.chkAllowTransparency.Text = "Transparent Window";
+            this.chkAllowTransparency.UseVisualStyleBackColor = true;
+            //
             // SettingsForm
             // 
             this.AcceptButton = this.OkButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelButton2;
-            this.ClientSize = new System.Drawing.Size(422, 342);
+            this.ClientSize = new System.Drawing.Size(422, 372);
             this.Controls.Add(this.GeneralGroup);
             this.Controls.Add(this.CapitalizationGroup);
             this.Controls.Add(this.CancelButton2);
@@ -453,6 +468,7 @@ namespace ThoNohT.NohBoard.Forms
         private GroupBox GeneralGroup;
         private Label lblTitle;
         private TextBox txtTitle;
+        private CheckBox chkAllowTransparency;
         private Label lblPresHoldDuration;
         private NumericUpDown udPressHold;
         private Label lblPressHold;

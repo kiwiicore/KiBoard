@@ -32,9 +32,9 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         [DataMember]
         public KeySubStyle Loose { get; set; } = new KeySubStyle
         {
-            Background = Color.FromArgb(100, 100, 100),
-            Text = Color.FromArgb(0, 0, 0),
-            Outline = Color.FromArgb(0, 255, 0),
+            Background = Color.FromArgb(255, 100, 100, 100),
+            Text = Color.FromArgb(255, 0, 0, 0),
+            Outline = Color.FromArgb(255, 0, 255, 0),
             OutlineWidth = 1
         };
 
@@ -44,9 +44,9 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         [DataMember]
         public KeySubStyle Pressed { get; set; } = new KeySubStyle
         {
-            Background = Color.FromArgb(255, 255, 255),
-            Text = Color.FromArgb(0, 0, 0),
-            Outline = Color.FromArgb(0, 255, 0),
+            Background = Color.FromArgb(255, 255, 255, 255),
+            Text = Color.FromArgb(255, 0, 0, 0),
+            Outline = Color.FromArgb(255, 0, 255, 0),
             OutlineWidth = 1
         };
 

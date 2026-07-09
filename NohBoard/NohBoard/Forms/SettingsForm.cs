@@ -85,6 +85,8 @@ namespace ThoNohT.NohBoard.Forms
 
             this.txtTitle.Text = GlobalSettings.Settings.WindowTitle;
 
+            this.chkAllowTransparency.Checked = GlobalSettings.Settings.TransparentWindow;
+
             this.udPressHold.Value = GlobalSettings.Settings.PressHold;
 
             this.SetToolTips();
@@ -136,7 +138,7 @@ namespace ThoNohT.NohBoard.Forms
             tooltip.SetToolTip(
                 this.txtTitle,
                 "Fill in if you want a custom window title." + nl
-                + "If left empty, the default window title of \"NohBoard + version number\" will be shown.");
+                + "If left empty, the default window title of \"KiBoard + version number\" will be shown.");
 
             tooltip.SetToolTip(this.udPressHold, "TODO: Tooltip about holding presses.");
         }
@@ -171,8 +173,10 @@ namespace ThoNohT.NohBoard.Forms
 
             GlobalSettings.Settings.PressHold = (int)this.udPressHold.Value;
 
-            GlobalSettings.Save();
+            GlobalSettings.Settings.TransparentWindow = this.chkAllowTransparency.Checked;
 
+            GlobalSettings.Save();
+            
             this.DialogResult = DialogResult.OK;
         }
 

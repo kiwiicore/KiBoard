@@ -302,7 +302,7 @@ namespace ThoNohT.NohBoard.Keyboard
             if (version < Constants.KeyboardVersion)
             {
                 throw new Exception(
-                    $"This version of NohBoard requires keyboards of version {Constants.KeyboardVersion}, " +
+                    $"This version of KiBoard requires keyboards of version {Constants.KeyboardVersion}, " +
                     $"but this keyboard is of version {version}.");
             }
 

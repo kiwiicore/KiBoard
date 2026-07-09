@@ -9,8 +9,8 @@
 KiBoard is an input visualisation program based on [NohBoard](https://github.com/ThoNohT/NohBoard). It focuses on improving usability and customization, allowing for higher efficiency in the creation and editing of layouts, while still retaining the simplicity that made NohBoard so popular. In addition to traditional keyboard and mouse visualisation, KiBoard aims to provide support for analog keyboards, allowing for the display of precise input data on supported devices.  
 
 ## To-Do  
-> (0/? Completed)  
-- [ ]  Native window transparency (Making Chroma Keying optional)
+> (1/? Completed)  
+- [x]  Native window transparency (Making Chroma Keying optional) *(may still need optimizations)*
 - [ ]  [Wooting Analog SDK](https://github.com/WootingKb/wooting-analog-sdk) support bundled with the [Universal Analog Plugin](https://github.com/AnalogSense/universal-analog-plugin) for displaying precise inputs from [supported devices](https://github.com/AnalogSense/universal-analog-plugin#supported-keyboardsdevices).
 - [ ]  Improve the editor UI/UX
 - [ ]  Multi-select for editing elements

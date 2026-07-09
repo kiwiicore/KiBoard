@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <Target Name="GenerateVersionedFiles" BeforeTargets="PreBuildEvent">
-    <Exec Command="$(SolutionDir)gotri.exe -i &quot;$(ProjectDir)Properties/AssemblyInfo.cs.template&quot; -o &quot;$(ProjectDir)Properties/AssemblyInfo.cs&quot;" />
     <ItemGroup>
       <Compile Include="**/*$(DefaultLanguageSourceExtension)"
                Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**;@(Compile)" />

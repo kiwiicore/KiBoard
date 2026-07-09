@@ -209,7 +209,7 @@ namespace ThoNohT.NohBoard.Forms
             this.lblRestart.Name = "lblRestart";
             this.lblRestart.Size = new System.Drawing.Size(443, 15);
             this.lblRestart.TabIndex = 12;
-            this.lblRestart.Text = "After a new font has been installed, NohBoard needs to be restarted to recognize " +
+            this.lblRestart.Text = "After a new font has been installed, KiBoard needs to be restarted to recognize " +
     "it.";
             // 
             // btnRestart

@@ -65,7 +65,7 @@ namespace ThoNohT.NohBoard
         /// <summary>
         /// The filename of the settings file.
         /// </summary>
-        public static string SettingsFilename => "NohBoard.json";
+        public static string SettingsFilename => "KiBoard.json";
 
         /// <summary>
         /// Returns the path this executable is running in.

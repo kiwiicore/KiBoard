@@ -1,6 +1,9 @@
 ﻿/*
 Copyright (C) 2016 by Eric Bataille <e.c.p.bataille@gmail.com>
 
+Modified for KiBoard
+Copyright (C) 2026 kiwicore
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -27,6 +30,12 @@ namespace ThoNohT.NohBoard.Extra
     public class SerializableColor
     {
         /// <summary>
+        /// The alpha component.
+        /// </summary>
+        [DataMember]
+        public byte Alpha { get; set; }
+
+        /// <summary>
         /// The red component.
         /// </summary>
         [DataMember]
@@ -50,7 +59,7 @@ namespace ThoNohT.NohBoard.Extra
         /// <param name="src">The color to convert.</param>
         public static implicit operator Color(SerializableColor src)
         {
-            return Color.FromArgb(src.Red, src.Green, src.Blue);
+            return Color.FromArgb(src.Alpha, src.Red, src.Green, src.Blue);
         }
 
         /// <summary>
@@ -61,6 +70,7 @@ namespace ThoNohT.NohBoard.Extra
         {
             return new SerializableColor
             {
+                Alpha = src.A,
                 Red = src.R,
                 Green = src.G,
                 Blue = src.B
@@ -83,7 +93,7 @@ namespace ThoNohT.NohBoard.Extra
         /// <returns>True if the color has changes, false otherwise.</returns>
         public bool IsChanged(SerializableColor other)
         {
-            return this.Red != other.Red || this.Green != other.Green || this.Blue != other.Blue;
+            return this.Alpha != other.Alpha || this.Red != other.Red || this.Green != other.Green || this.Blue != other.Blue;
         }
     }
 

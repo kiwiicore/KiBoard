@@ -58,8 +58,8 @@ namespace ThoNohT.NohBoard
 
             File.WriteAllText(logFile.FullName, $"{ShowException(ex)}{CollectState()}");
 
-            MessageBox.Show($"NohBoard crashed. Exception message: {ex.Message}{Environment.NewLine}" +
-                $"A crash log was generated: {logFile.FullName}", "NohBoard has crashed");
+            MessageBox.Show($"KiBoard crashed. Exception message: {ex.Message}{Environment.NewLine}" +
+                $"A crash log was generated: {logFile.FullName}", "KiBoard has crashed");
             Crashed = true;
             Application.Exit();
         }

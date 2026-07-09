@@ -34,14 +34,14 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         /// The inner color of the mouse speed indicator. This is also the color as shown when no movement occurs.
         /// </summary>
         [DataMember]
-        public SerializableColor InnerColor { get; set; } = Color.FromArgb(100, 100, 100);
+        public SerializableColor InnerColor { get; set; } = Color.FromArgb(255, 100, 100, 100);
 
         /// <summary>
         /// The outer color of the mouse speed indicator. This is the color of the outer edge of the indicator when
         /// there is maximum movement.
         /// </summary>
         [DataMember]
-        public SerializableColor OuterColor { get; set; } = Color.FromArgb(255, 255, 255);
+        public SerializableColor OuterColor { get; set; } = Color.FromArgb(255, 255, 255, 255);
 
         /// <summary>
         /// The width of the outline.

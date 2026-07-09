@@ -1,6 +1,9 @@
 ﻿/*
 Copyright (C) 2016 by Eric Bataille <e.c.p.bataille@gmail.com>
 
+Modified for KiBoard
+Copyright (C) 2026 kiwicore
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -30,6 +33,7 @@ namespace ThoNohT.NohBoard.Forms
     using System.Linq;
     using System.Net.Http;
     using System.Runtime.Serialization.Json;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
@@ -60,6 +64,16 @@ namespace ThoNohT.NohBoard.Forms
         /// </summary>
         private VersionInfo latestVersion = null;
 
+        /// <summary>
+        /// Whether the window should currently be rendered as a layered, transparent window.
+        /// </summary>
+        private bool useLayeredWindow = true;
+
+        /// <summary>
+        /// Bitmap used for when rendering as a transparent window
+        /// </summary>
+        private Bitmap renderBitmap = null;
+
         #endregion Fields
 
         #region Constructors
@@ -71,6 +85,9 @@ namespace ThoNohT.NohBoard.Forms
         {
             this.InitializeComponent();
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+
+            this.ShowInTaskbar = true;
+            this.DoubleBuffered = !this.useLayeredWindow;
         }
 
         #endregion Constructors
@@ -86,7 +103,7 @@ namespace ThoNohT.NohBoard.Forms
                 () =>
                 {
                     var updateUrl =
-                        "https://gist.githubusercontent.com/ThoNohT/3181561f8148fb6b865f88714e975154/raw/nohboard_version.json";
+                        "https://gist.githubusercontent.com/kiwiicore/6a3c1c60e8fbc3a077e3ef6b493374b5/raw/kiboard_version.json";
 
                     VersionInfo downloadVersionInfo(string url)
                     {
@@ -223,7 +240,8 @@ namespace ThoNohT.NohBoard.Forms
                 {
                     var bmp = new Bitmap(
                         GlobalSettings.CurrentDefinition.Width,
-                        GlobalSettings.CurrentDefinition.Height);
+                        GlobalSettings.CurrentDefinition.Height,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     var g = Graphics.FromImage(bmp);
 
                     // Render the background image if set.
@@ -362,7 +380,7 @@ namespace ThoNohT.NohBoard.Forms
             this.Location = new Point(GlobalSettings.Settings.X, GlobalSettings.Settings.Y);
             var title = GlobalSettings.Settings.WindowTitle;
 
-            this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
+            this.Text = string.IsNullOrWhiteSpace(title) ? $"KiBoard {Version.Get}" : title;
 
             this.GetLatestVersion().Start();
 
@@ -415,6 +433,10 @@ namespace ThoNohT.NohBoard.Forms
             this.UpdateTimer.Interval = GlobalSettings.Settings.UpdateInterval;
             this.UpdateTimer.Enabled = true;
             this.KeyCheckTimer.Enabled = true;
+
+            this.useLayeredWindow = GlobalSettings.Settings.TransparentWindow;
+            this.DoubleBuffered = !this.useLayeredWindow;
+            this.RecreateHandle();
 
             this.Activate();
             this.ApplySettings();
@@ -469,8 +491,19 @@ namespace ThoNohT.NohBoard.Forms
             HookManager.ScrollHold = GlobalSettings.Settings.ScrollHold;
             HookManager.PressHold = GlobalSettings.Settings.PressHold;
 
+            if(GlobalSettings.Settings.TransparentWindow != this.useLayeredWindow && !this.mnuToggleEditMode.Checked)
+            {
+                this.useLayeredWindow = GlobalSettings.Settings.TransparentWindow;
+                this.DoubleBuffered = !this.useLayeredWindow;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                if(useLayeredWindow) { 
+                    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; 
+                }
+                this.RecreateHandle();
+            }
+
             var title = GlobalSettings.Settings.WindowTitle;
-            this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
+            this.Text = string.IsNullOrWhiteSpace(title) ? $"KiBoard {Version.Get}" : title;
 
             this.LoadKeyboard();
         }
@@ -544,7 +577,7 @@ namespace ThoNohT.NohBoard.Forms
             {
                 this.mnuUpdate.Text = $"New version available: {this.latestVersion.Format()}.";
                 this.mnuUpdate.Visible = true;
-                this.mnuUpdate.Click += (s, ea) => { Process.Start(new ProcessStartInfo { FileName = "https://github.com/ThoNohT/NohBoard/releases", UseShellExecute = true }); };
+                this.mnuUpdate.Click += (s, ea) => { Process.Start(new ProcessStartInfo { FileName = "https://github.com/kiwiicore/KiBoard/releases", UseShellExecute = true }); };
             }
 
             this.mnuMoveElement.Visible = this.relevantDefinition != null;
@@ -582,54 +615,161 @@ namespace ThoNohT.NohBoard.Forms
         #endregion Settings
 
         #region Rendering
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                if (this.useLayeredWindow)
+                    cp.ExStyle |= 0x80000; // WS_EX_LAYERED
+                return cp;
+            }
+        }
 
         /// <summary>
         /// Paints the keyboard on the screen.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.Clear(GlobalSettings.CurrentStyle.BackgroundColor);
-
-            if (GlobalSettings.CurrentDefinition == null || !this.backBrushes.Any())
-                return;
-
-            // Fill the appropriate back brush.
-            e.Graphics.FillRectangle(
-                this.backBrushes[KeyboardState.ShiftDown][KeyboardState.CapsActive],
-                new Rectangle(0, 0, GlobalSettings.CurrentDefinition.Width, GlobalSettings.CurrentDefinition.Height));
-
-            // Render all keys.
-            KeyboardState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
-            var kbKeys = KeyboardState.PressedKeys;
-            var mouseKeys = MouseState.PressedKeys.Select(k => (int)k).ToList();
-            MouseState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
-            MouseState.CheckScrollAndMovement();
-            var scrollCounts = MouseState.ScrollCounts;
-            var allDefs = GlobalSettings.CurrentDefinition.Elements;
-            foreach (var def in allDefs)
+            if (renderBitmap == null ||
+                renderBitmap.Width != this.Width ||
+                renderBitmap.Height != this.Height)
             {
-                this.Render(e.Graphics, def, allDefs, kbKeys, mouseKeys, scrollCounts, false);
+                renderBitmap = new Bitmap(
+                    this.Width,
+                    this.Height,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             }
 
-            // Draw the element being manipulated
-            if (this.currentlyManipulating == null)
+            using (Graphics g = Graphics.FromImage(renderBitmap))
             {
-                if (this.highlightedDefinition != this.selectedDefinition)
-                    // Draw highlighted only if it is not also selected.
-                    this.highlightedDefinition?.RenderHighlight(e.Graphics);
+                if (this.useLayeredWindow)
+                    g.Clear(Color.Transparent);
+                else
+                    g.Clear(GlobalSettings.CurrentStyle.BackgroundColor);
 
-                if (this.selectedDefinition != null)
+                if (GlobalSettings.CurrentDefinition == null || !this.backBrushes.Any())
+                    return;
+
+                // Fill the appropriate back brush.
+                g.FillRectangle(
+                    this.backBrushes[KeyboardState.ShiftDown][KeyboardState.CapsActive],
+                    new Rectangle(0, 0, GlobalSettings.CurrentDefinition.Width, GlobalSettings.CurrentDefinition.Height));
+
+                // Render all keys.
+                KeyboardState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
+                var kbKeys = KeyboardState.PressedKeys;
+                var mouseKeys = MouseState.PressedKeys.Select(k => (int)k).ToList();
+                MouseState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
+                MouseState.CheckScrollAndMovement();
+                var scrollCounts = MouseState.ScrollCounts;
+                var allDefs = GlobalSettings.CurrentDefinition.Elements;
+                foreach (var def in allDefs)
                 {
-                    this.Render(e.Graphics, this.selectedDefinition, allDefs, kbKeys, mouseKeys, scrollCounts, true);
-                    this.selectedDefinition.RenderSelected(e.Graphics);
+                    this.Render(g, def, allDefs, kbKeys, mouseKeys, scrollCounts, false);
                 }
-            }
-            else
-            {
-                this.currentlyManipulating.Value.definition.RenderEditing(e.Graphics);
-            }
 
-            base.OnPaint(e);
+                // Draw the element being manipulated
+                if (this.currentlyManipulating == null)
+                {
+                    if (this.highlightedDefinition != this.selectedDefinition)
+                        // Draw highlighted only if it is not also selected.
+                        this.highlightedDefinition?.RenderHighlight(g);
+
+                    if (this.selectedDefinition != null)
+                    {
+                        this.Render(g, this.selectedDefinition, allDefs, kbKeys, mouseKeys, scrollCounts, true);
+                        this.selectedDefinition.RenderSelected(g);
+                    }
+                }
+                else
+                {
+                    this.currentlyManipulating.Value.definition.RenderEditing(g);
+                }
+
+                if (this.useLayeredWindow)
+                    UpdateWindowBitmap(renderBitmap);
+                else
+                    e.Graphics.DrawImage(renderBitmap, Point.Empty);
+            }
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool UpdateLayeredWindow(
+            IntPtr hwnd,
+            IntPtr hdcDst,
+            ref Point pptDst,
+            ref Size psize,
+            IntPtr hdcSrc,
+            ref Point pptSrc,
+            int crKey,
+            ref BLENDFUNCTION pblend,
+            int dwFlags);
+
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteDC(IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
+
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr SelectObject(
+            IntPtr hdc,
+            IntPtr h);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct BLENDFUNCTION
+        {
+            public byte BlendOp;
+            public byte BlendFlags;
+            public byte SourceConstantAlpha;
+            public byte AlphaFormat;
+        }
+
+        private void UpdateWindowBitmap(Bitmap bitmap)
+        {
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                IntPtr screenDc = graphics.GetHdc();
+
+                IntPtr memDc = CreateCompatibleDC(screenDc);
+
+                IntPtr hBitmap = bitmap.GetHbitmap(Color.FromArgb(0));
+                IntPtr oldBitmap = SelectObject(memDc, hBitmap);
+
+                Point topPos = new Point(this.Left, this.Top);
+                Size size = bitmap.Size;
+                Point sourcePoint = new Point(0, 0);
+
+                BLENDFUNCTION blend = new BLENDFUNCTION
+                {
+                    BlendOp = 0,
+                    BlendFlags = 0,
+                    SourceConstantAlpha = 255,
+                    AlphaFormat = 1
+                };
+
+                UpdateLayeredWindow(
+                    this.Handle,
+                    screenDc,
+                    ref topPos,
+                    ref size,
+                    memDc,
+                    ref sourcePoint,
+                    0,
+                    ref blend,
+                    2);
+
+                SelectObject(memDc, oldBitmap);
+
+                DeleteObject(hBitmap);
+                DeleteDC(memDc);
+
+                graphics.ReleaseHdc(screenDc);
+            }
         }
 
         /// <summary>
@@ -711,7 +851,7 @@ namespace ThoNohT.NohBoard.Forms
         /// </summary>
         private void mnuGenerateLog_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("This will crash NohBoard in order to generate a log, are you sure you want to do this?", "Generate crash log", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("This will crash KiBoard in order to generate a log, are you sure you want to do this?", "Generate crash log", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 throw new Exception("A crash log was requested.");
             }

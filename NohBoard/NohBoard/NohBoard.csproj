@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>ThoNohT.NohBoard</RootNamespace>
+    <AssemblyName>KiBoard</AssemblyName>
     <StartupObject>ThoNohT.NohBoard.Program</StartupObject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PublishReadyToRun>true</PublishReadyToRun>
@@ -13,7 +14,6 @@
   </PropertyGroup>
 
   <Target Name="GenerateVersionedFiles" BeforeTargets="BeforeBuild">
-    <Exec Command="$(SolutionDir)gotri.exe -i &quot;$(ProjectDir)Version.cs.template&quot; -o &quot;$(ProjectDir)Version.cs&quot;&#xD;&#xA;$(SolutionDir)gotri.exe -i &quot;$(ProjectDir)Properties/AssemblyInfo.cs.template&quot; -o &quot;$(ProjectDir)Properties/AssemblyInfo.cs&quot;" />
     <ItemGroup>
       <Compile Include="**/*$(DefaultLanguageSourceExtension)"
                Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**;@(Compile)" />

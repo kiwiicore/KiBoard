@@ -1,6 +1,9 @@
 ﻿/*
 Copyright (C) 2016 by Eric Bataille <e.c.p.bataille@gmail.com>
 
+Modified for KiBoard
+Copyright (C) 2026 kiwicore
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -142,6 +145,7 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor1.Blue = ((byte)(0));
             serializableColor1.Green = ((byte)(0));
             serializableColor1.Red = ((byte)(0));
+            serializableColor1.Alpha = ((byte)(0));
             keySubStyle1.Background = serializableColor1;
             keySubStyle1.BackgroundImageFileName = "";
             serializableFont1.AlternateFontFamily = null;
@@ -153,12 +157,14 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor2.Blue = ((byte)(0));
             serializableColor2.Green = ((byte)(0));
             serializableColor2.Red = ((byte)(0));
+            serializableColor2.Alpha = ((byte)(0));
             keySubStyle1.Outline = serializableColor2;
             keySubStyle1.OutlineWidth = 1;
             keySubStyle1.ShowOutline = false;
             serializableColor3.Blue = ((byte)(0));
             serializableColor3.Green = ((byte)(0));
             serializableColor3.Red = ((byte)(0));
+            serializableColor3.Alpha = ((byte)(0));
             keySubStyle1.Text = serializableColor3;
             this.pressedKeys.SubStyle = keySubStyle1;
             this.pressedKeys.TabIndex = 13;
@@ -172,6 +178,7 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor4.Blue = ((byte)(0));
             serializableColor4.Green = ((byte)(0));
             serializableColor4.Red = ((byte)(0));
+            serializableColor4.Alpha = ((byte)(0));
             keySubStyle2.Background = serializableColor4;
             keySubStyle2.BackgroundImageFileName = "";
             serializableFont2.AlternateFontFamily = null;
@@ -183,12 +190,14 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor5.Blue = ((byte)(0));
             serializableColor5.Green = ((byte)(0));
             serializableColor5.Red = ((byte)(0));
+            serializableColor5.Alpha = ((byte)(0));
             keySubStyle2.Outline = serializableColor5;
             keySubStyle2.OutlineWidth = 1;
             keySubStyle2.ShowOutline = false;
             serializableColor6.Blue = ((byte)(0));
             serializableColor6.Green = ((byte)(0));
             serializableColor6.Red = ((byte)(0));
+            serializableColor6.Alpha = ((byte)(0));
             keySubStyle2.Text = serializableColor6;
             this.looseKeys.SubStyle = keySubStyle2;
             this.looseKeys.TabIndex = 12;
@@ -210,10 +219,12 @@ namespace ThoNohT.NohBoard.Forms.Style
             serializableColor7.Blue = ((byte)(0));
             serializableColor7.Green = ((byte)(0));
             serializableColor7.Red = ((byte)(0));
+            serializableColor7.Alpha = ((byte)(0));
             mouseSpeedIndicatorStyle1.InnerColor = serializableColor7;
             serializableColor8.Blue = ((byte)(0));
             serializableColor8.Green = ((byte)(0));
             serializableColor8.Red = ((byte)(0));
+            serializableColor8.Alpha = ((byte)(0));
             mouseSpeedIndicatorStyle1.OuterColor = serializableColor8;
             mouseSpeedIndicatorStyle1.OutlineWidth = 1;
             this.defaultMouseSpeed.IndicatorStyle = mouseSpeedIndicatorStyle1;

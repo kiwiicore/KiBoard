@@ -79,10 +79,16 @@ namespace ThoNohT.NohBoard.Extra
         #region General
 
         /// <summary>
-        /// The window title. If empty, NohBoard with the version number will be shown.
+        /// The window title. If empty, KiBoard with the version number will be shown.
         /// </summary>
         [DataMember]
         public string WindowTitle { get; set; } = "";
+
+        /// <summary>
+        /// Whether native window transparency is used
+        /// </summary>
+        [DataMember]
+        public bool TransparentWindow { get; set; } = true;
 
         #endregion General
 
@@ -203,13 +209,13 @@ namespace ThoNohT.NohBoard.Extra
         public bool LoadedGlobalStyle { get; set; }
 
         /// <summary>
-        /// The X position of the NohBoard window.
+        /// The X position of the KiBoard window.
         /// </summary>
         [DataMember]
         public int X { get; set; } = 25;
 
         /// <summary>
-        /// The Y position of the NohBoard window.
+        /// The Y position of the KiBoard window.
         /// </summary>
         [DataMember]
         public int Y { get; set; } = 25;

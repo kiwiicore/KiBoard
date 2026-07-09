@@ -145,5 +145,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         {
             return (ushort)data;
         }
+
+        [DllImport("gdi32.dll")]
+        internal static extern bool DeleteObject(IntPtr hObject);
     }
 }

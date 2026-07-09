@@ -28,6 +28,7 @@ namespace ThoNohT.NohBoard.Forms
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows.Forms;
 
     /// <summary>
@@ -106,6 +107,13 @@ namespace ThoNohT.NohBoard.Forms
         {
             this.menuOpen = false;
 
+            if (GlobalSettings.Settings.TransparentWindow)
+            {
+                this.useLayeredWindow = !this.mnuToggleEditMode.Checked;
+                this.DoubleBuffered = !this.useLayeredWindow;
+                this.RecreateHandle();
+            }
+
             this.mnuToggleEditMode.Text = this.mnuToggleEditMode.Checked ? "Stop Editing" : "Start Editing";
             this.FormBorderStyle =
                 this.mnuToggleEditMode.Checked ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
@@ -135,10 +143,25 @@ namespace ThoNohT.NohBoard.Forms
         /// Handles the MouseDown event for the main form, which can start editing an element, the mouse is pointing
         /// at one.
         /// </summary>
+        [DllImport("user32.dll")]
+        private static extern bool ReleaseCapture();
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HTCAPTION = 0x2;
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            if (!this.mnuToggleEditMode.Checked || this.menuOpen) return;
+            if (this.menuOpen) return;
+
+            if (!this.mnuToggleEditMode.Checked)
+            {
+                ReleaseCapture();
+                SendMessage(this.Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+                return;
+            }
 
             ElementDefinition toManipulate;
             if (this.selectedDefinition != null)
